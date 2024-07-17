@@ -26,14 +26,14 @@ const userSchema = new Schema(
       type: "string",
       required: true,
     },
-    coverImg: {
+    coverImage: {
       type: "string",
     },
     password: {
       type: "string",
       required: [true, "Password is required"],
     },
-    refresh_token: {
+    refreshToken: {
       type: "string",
     },
   },
@@ -48,7 +48,7 @@ userSchema.pre("save", async function (next) {
 });
 
 // compare password
-userSchema.methods.isCoorectPassword = async function (password) {
+userSchema.methods.isCorrectPassword = async function (password) {
   return await bcryptjs.compare(password, this.password);
 };
 
