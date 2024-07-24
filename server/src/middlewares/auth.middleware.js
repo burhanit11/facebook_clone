@@ -4,7 +4,7 @@ import { User } from "../models/users.models.js";
 export const verifyJWT = async (req, res, next) => {
   try {
     const token =
-      req.cookies.accessToken ||
+      req.cookies?.accessToken ||
       req.header("authorization")?.replace("Brearer ", "");
 
     if (!token) {
@@ -12,6 +12,7 @@ export const verifyJWT = async (req, res, next) => {
     }
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    console.log(decodedToken, "decodedToken ");
 
     const user = await User.findById(decodedToken._id).select(
       "-password -refreshToken"

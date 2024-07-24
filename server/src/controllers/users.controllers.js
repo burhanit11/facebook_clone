@@ -1,6 +1,8 @@
 import { User } from "../models/users.models.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import jwt from "jsonwebtoken";
 
+// access and refresh token
 const accessTokenAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -144,11 +146,108 @@ const logout = async (req, res) => {
   }
 };
 
+// refresh access token
 const refreshToken = async (req, res) => {
+  const incomingRefreshToken =
+    req.cookies?.refreshToken || req.body.refreshToken;
+
+  if (!incomingRefreshToken) {
+    return res.status(403).json({ message: "Unauthorized Requiest." });
+  }
+  console.log(incomingRefreshToken, "icomingToken");
+  try {
+    const decoded = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    console.log(decoded, "?????");
+    const user = await User.findById(decoded._id);
+
+    if (!user) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+    if (incomingRefreshToken !== user.refreshToken) {
+      return res
+        .status(403)
+        .json({ message: "Refresh token are expired or used" });
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refreshToken } = await accessTokenAndRefreshToken(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({ message: "Access Token refreshed" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// change current password
+
+const changeCurrentPassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+
+    const user = await User.findById(req.user?._id);
+
+    const matchPassword = await user.isCorrectPassword(oldPassword);
+
+    if (!matchPassword) {
+      res.status(402).json({ message: "Invalid password." });
+    }
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({ message: "Password change successfully." });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// update account details
+const updateAccountDetail = async (req, res) => {
+  const { name, email } = req.body;
+
+  if (!email || !name) {
+    res.status(402).json({ message: "All fields are requred" });
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        name,
+        email,
+      },
+    },
+    { new: true }
+  ).select("-password");
+
+  res.status(200).json({ message: "Account Update successfully", user });
+};
+
+const updateAvatr = async (req, res) => {
   try {
   } catch (error) {
     console.log(error);
   }
 };
 
-export { signup, login, logout, refreshToken };
+export {
+  signup,
+  login,
+  logout,
+  refreshToken,
+  changeCurrentPassword,
+  updateAccountDetail,
+};
