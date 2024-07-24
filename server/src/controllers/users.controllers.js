@@ -90,8 +90,6 @@ const login = async (req, res) => {
       userExists._id
     );
 
-    console.log(accessToken, refreshToken);
-
     const options = {
       httpOnly: true,
       secure: true,
@@ -236,8 +234,91 @@ const updateAccountDetail = async (req, res) => {
   res.status(200).json({ message: "Account Update successfully", user });
 };
 
-const updateAvatr = async (req, res) => {
+// avatar is update
+const updateAvatar = async (req, res) => {
   try {
+    const avatarLocalPath = req.file.path;
+
+    if (!avatarLocalPath) {
+      res.status(403).json({ message: "Avatar Local Path are required." });
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    const user = await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: {
+          avatar: avatar?.url,
+        },
+      },
+      {
+        new: true,
+      }
+    ).select("-password -refreshToken");
+
+    res.status(200).json({ message: "Avatar is update successfully.", user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// coverImage
+const updateCoverImage = async (req, res) => {
+  try {
+    const coverImageLocalPath = req.file?.path;
+
+    if (!coverImageLocalPath) {
+      res.status(403).json({ message: "Cover Image Local Path are required." });
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+
+    const user = await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: {
+          coverImage: coverImage?.url,
+        },
+      },
+      {
+        new: true,
+      }
+    ).select("-password -refreshToken");
+
+    res.status(200).json({ message: "Avatar is update successfully.", user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get currnt user
+const getCurrentUser = async (req, res) => {
+  try {
+    const user = req.user;
+    console.log(user, "user");
+    res.status(200).json({ message: "current user fetch successfully.", user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get user channel
+const getUserChannel = async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    if (!username) {
+      return res.status(404).json({ message: "username is missing" });
+    }
+
+    const channel = User.aggregate([
+      {
+        $match: {
+          username: username?.lowercase(),
+        },
+      },
+    ]);
   } catch (error) {
     console.log(error);
   }
@@ -250,4 +331,7 @@ export {
   refreshToken,
   changeCurrentPassword,
   updateAccountDetail,
+  updateAvatar,
+  updateCoverImage,
+  getCurrentUser,
 };

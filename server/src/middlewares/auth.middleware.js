@@ -7,6 +7,8 @@ export const verifyJWT = async (req, res, next) => {
       req.cookies?.accessToken ||
       req.header("authorization")?.replace("Brearer ", "");
 
+    console.log(token, "token");
+
     if (!token) {
       return res.status(404).json({ message: "Unauthorized Request." });
     }
