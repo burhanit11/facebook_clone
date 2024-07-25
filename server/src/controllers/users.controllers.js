@@ -1,3 +1,4 @@
+
 import { User } from "../models/users.models.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 
@@ -152,4 +153,6 @@ const refreshToken = async (req, res) => {
   }
 };
 
-export { signup, login, logout, refreshToken };
+
+
+export { signup, login, logout, refreshToken,updateAvatar };
