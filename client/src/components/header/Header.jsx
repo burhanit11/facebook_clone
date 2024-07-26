@@ -18,6 +18,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import logo from "../../../public/images/logo.png";
 import Image from "next/image";
+import AppsIcon from "@mui/icons-material/Apps";
+import HomeIcon from "@mui/icons-material/Home";
+import GroupIcon from "@mui/icons-material/Group";
+import GroupsIcon from "@mui/icons-material/Groups";
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -158,45 +163,88 @@ const Header = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: "white" }}>
+      <AppBar
+        position="static"
+        sx={{ bgcolor: "white", boxShadow: "none" }}
+        className="drop-shadow-lg"
+      >
         <Toolbar>
           <IconButton
             size="large"
             edge="start"
-            color="inherit"
+            color="primary"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{
+              p: 0,
+            }}
           >
-            <Image src={logo} height={50} width={50} />
+            <FacebookOutlinedIcon sx={{ fontSize: "40px" }} />
           </IconButton>
-          <Search sx={{ bgcolor: "#f0f2f5" }}>
-            <SearchIconWrapper
-              sx={{
-                bgcolor: "#f0f2f5",
-              }}
-            >
-              <SearchIcon color="#f0f2f5" />
+          <Search
+            sx={{ backgroundColor: "#f0f2f5", color: "black", m: 0 }}
+            className="rounded-full"
+          >
+            <SearchIconWrapper>
+              <SearchIcon className="text-black" />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+
+          <Box className="text-black   flex justify-around items-center w-full mx-10 pr-32  ">
             <IconButton
               size="large"
+              color={"primary"}
+              sx={{ bgcolor: "#f0f2f5" }}
               aria-label="show 4 new mails"
-              color="inherit"
             >
-              <Badge badgeContent={4} color="error">
+              <HomeIcon />
+            </IconButton>
+
+            <IconButton
+              size="large"
+              color={"default"}
+              sx={{ bgcolor: "#f0f2f5" }}
+              aria-label="show 4 new mails"
+            >
+              <GroupIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              color={"default"}
+              sx={{ bgcolor: "#f0f2f5" }}
+              aria-label="show 4 new mails"
+            >
+              <GroupsIcon />
+            </IconButton>
+          </Box>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+            {/* <Box className="text-black flex justify-center font-samibold items-center bg-greyColor  rounded-full">
+              Find Frinds
+            </Box> */}
+            <IconButton
+              size="large"
+              color={"default"}
+              sx={{ bgcolor: "#f0f2f5" }}
+              aria-label="show 4 new mails"
+            >
+              <AppsIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              sx={{ bgcolor: "#f0f2f5" }}
+              aria-label="show 4 new mails"
+            >
+              <Badge badgeContent={4} color="error" sx={{ bgcolor: "#f0f2f5" }}>
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton
               size="large"
+              sx={{ bgcolor: "#f0f2f5" }}
               aria-label="show 17 new notifications"
-              color="inherit"
             >
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
@@ -209,7 +257,7 @@ const Header = () => {
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              sx={{ bgcolor: "#f0f2f5" }}
             >
               <AccountCircle />
             </IconButton>
@@ -221,7 +269,7 @@ const Header = () => {
               aria-controls={mobileMenuId}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
-              color="inherit"
+              sx={{ bgcolor: "#f0f2f5" }}
             >
               <MoreIcon />
             </IconButton>
