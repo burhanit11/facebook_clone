@@ -308,17 +308,71 @@ const getUserChannel = async (req, res) => {
   try {
     const { username } = req.params;
 
-    if (!username) {
+    if (!username.trim()) {
       return res.status(404).json({ message: "username is missing" });
     }
 
     const channel = User.aggregate([
       {
         $match: {
-          username: username?.lowercase(),
+          username: username?.toLowerCase(),
+        },
+      },
+      {
+        $lookup: {
+          from: "subscriptions",
+          foreignField: "channel",
+          localField: "_id",
+          as: "subcribers",
+        },
+      },
+      {
+        $lookup: {
+          from: "subscriptions",
+          foreignField: "subscriber",
+          localField: "_id",
+          as: "subcribedTo",
+        },
+      },
+      {
+        $addFields: {
+          subscrberCount: {
+            $size: "$subcribers",
+          },
+          channelSubcribedCount: {
+            $size: "$subcribedTo",
+          },
+        },
+        isSubscribed: {
+          $cond: {
+            if: { $in: [req.user?._id, "subcribers.subscriber"] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          username: 1,
+          email: 1,
+          subscrberCount: 1,
+          channelSubcribedCount: 1,
+          isSubscribed: 1,
+          avatar: 1,
+          coverImage: 1,
         },
       },
     ]);
+
+    console.log(channel, "channel");
+
+    if (!channel.length) {
+      return res.status(403).json({ message: "Channel do not exsits." });
+    }
+
+    const data = channel[0];
+    res.status(200).json({ message: "User Channel Fetch Successfully", data });
   } catch (error) {
     console.log(error);
   }
@@ -334,4 +388,5 @@ export {
   updateAvatar,
   updateCoverImage,
   getCurrentUser,
+  getUserChannel,
 };

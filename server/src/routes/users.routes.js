@@ -2,6 +2,7 @@ import express from "express";
 import {
   changeCurrentPassword,
   getCurrentUser,
+  getUserChannel,
   login,
   logout,
   refreshToken,
@@ -43,5 +44,6 @@ router
   .put(verifyJWT, upload.single("coverImage"), updateCoverImage);
 
 router.route("/get-current-user").get(verifyJWT, getCurrentUser);
+router.route("/get-channel").get(verifyJWT, getUserChannel);
 
 export default router;
