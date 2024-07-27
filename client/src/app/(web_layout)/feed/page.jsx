@@ -6,7 +6,7 @@ import React from "react";
 const Feed = () => {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="flex justify-between">
         <LeftSidebar />
         <h1>Feed</h1>
