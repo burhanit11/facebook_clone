@@ -180,7 +180,7 @@ const Header = () => {
               size="large"
               edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
+              // aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               sx={{ bgcolor: "#f0f2f5" }}
@@ -192,7 +192,7 @@ const Header = () => {
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={mobileMenuId}
+              // aria-controls={mobileMenuId}s
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
               sx={{ bgcolor: "#f0f2f5" }}
@@ -202,8 +202,8 @@ const Header = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMobileMenu} */}
+      {/* {renderMenu} */}
     </Box>
   );
 };
