@@ -1,6 +1,7 @@
 import Header from "@/components/header/Header";
 import LeftSidebar from "@/components/leftSidebar/LeftSidebar";
 import RightSidebar from "@/components/rightSidebar/RightSidebar";
+import Mian from "@/components/main/Main";
 import React from "react";
 
 const Feed = () => {
@@ -9,7 +10,7 @@ const Feed = () => {
       {/* <Header /> */}
       <div className="flex justify-between">
         <LeftSidebar />
-        <h1>Feed</h1>
+        <Mian />
         <RightSidebar />
       </div>
     </div>

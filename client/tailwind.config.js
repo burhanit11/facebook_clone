@@ -1,3 +1,5 @@
+const { grey } = require("@mui/material/colors");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,7 +11,8 @@ module.exports = {
     extend: {
       colors: {
         primary: "#0866ff",
-        grayColor: "#d8dadf",
+        grayColor: "#f0f2f5",
+        grayColor2: "#787a7d",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
